@@ -1,0 +1,46 @@
+html {
+    width: 100% !important;
+}
+
+body > div.container {
+    font-family: "Press Start 2P", sans-serif;
+    width: 85%;
+    margin: auto !important;
+}
+
+body > div.container > div.story__image,
+body > div.container > div.story__quest__line {
+    display: inline-block !important;
+}
+
+body > div.container > div.story__quest__line {
+    width: 320px;
+    height: auto;
+    display: inline-block !important;
+}
+
+body > div.container > div.story__image {
+    width: 512px;
+    height: 512px;
+
+    border: 1px rgba(95, 95, 95, 0.98) solid;
+    display: inline-block !important;
+}
+
+div.clearfix {
+    width: inherit;
+    clear: both !important;
+    line-height: normal;
+}
+
+p.story__line__path_selector {
+    cursor: pointer !important;
+}
+
+p.story__line__path_selector:before {
+    content: '- '
+}
+
+p.story__line__path_selector:hover:before {
+    content: '> ';
+}
