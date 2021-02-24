@@ -2,8 +2,32 @@
 const qGen = {
     values: {
         step: 0,
+        hasFood: false,
+        hasWater: false,
+        equipment: {
+            weapon: {
+                rod: false,
+                knife: false,
+                axe: false,
+                sword: false,
+            },
+            armor: {
+                vest: false,
+                mailPlate: false,
+                chainPlate: false,
+                chainMailPlate: false,
+                dragonArmor: false
+            }
+        },
+        supplies: {
+            food: 0,
+            water: 0
+        }
     },
     defaults: {
+        urls: {
+            options: '/src/json/options.json'
+        },
         image: '/src/images/placeholder.webp',
         sfx: {
             menu: '/src/sfx/options.mp3',
@@ -32,37 +56,8 @@ const qGen = {
                 {text: 'Свернуть направо', option: 'right'},
             ]
         },
-        options: {
-            left: {
-                0: {
-                    image: null,
-                    html: "По дороге Вы наткнулись на таверну.<br>" +
-                        "Желаете посетить?",
-                    options: [
-                        {text: 'Да', option: 'left'},
-                        {text: 'Пройти мимо', option: 'right'},
-                    ],
-                },
-            },
-            right: {
-                0: {
-                    image: null,
-                    html: '',
-                    options: [
-                        {text: '', option: 'left'},
-                    ],
-                },
-            },
-            straight: {
-                0: {
-                    image: null,
-                    html: '',
-                    options: [
-                        {text: '', option: 'left'},
-                    ],
-                },
-            }
-        }
+        options: null
+
     },
     f: {
         resetSteps() {
@@ -130,7 +125,10 @@ const qGen = {
         },
         playSoundOnHover(sound) {
             let audio = new Audio(window._q_gen.defaults.sfx[sound]);
-            audio.play();
+            audio.play()
+                .then(() => {
+                    audio.muted = false;
+                });
         },
         updateDataByElement(element) {
             let step = element.getAttribute('data-step'),
@@ -150,10 +148,25 @@ const qGen = {
             window._q_gen.f.setStoryImage(story.image ?? window._q_gen.defaults.image);
             window._q_gen.f.setStoryTitle(story.html);
             window._q_gen.f.setStoryOptions(story.options);
+        },
+        getOptions() {
+            fetch(window._q_gen.defaults.urls.options)
+                .then(async r => {
+                    if (r.ok) {
+                        window._q_gen.defaults.options = await r.json();
+
+                        console.log('Options has been loaded', window._q_gen.defaults.options);
+                    }
+                })
         }
     },
     init() {
         let start = window._q_gen.defaults.start;
+
+        // To be able to play audio, we need to interact with the DOM
+        window._q_gen.defaults.elements.storyImage.click();
+
+        window._q_gen.f.getOptions();
         window._q_gen.f.setStoryImage(start.image ?? window._q_gen.defaults.image);
         window._q_gen.f.setStoryTitle(start.html);
         window._q_gen.f.setStoryOptions(start.options);

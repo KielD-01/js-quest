@@ -14,7 +14,7 @@ body > div.container > div.story__quest__line {
 }
 
 body > div.container > div.story__quest__line {
-    width: 320px;
+    width: 640px;
     height: auto;
     display: inline-block !important;
 }
